@@ -1,0 +1,14 @@
+{
+  "name": "father-son-running",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "web"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "build": "npm run build -w web",
+    "test": "npm run test -w web",
+    "preview": "npm run preview -w web"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "running-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate-runs.mjs",
+    "dev": "npm run generate && vite --host 127.0.0.1",
+    "build": "npm run generate && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test src/domain/*.test.js"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "leaflet": "^1.9.4",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}

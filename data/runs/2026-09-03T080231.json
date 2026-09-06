@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "2026-09-03T080231",
+  "date": "2026-09-03",
+  "startTime": "2026-09-03T08:02:31+09:00",
+  "title": "비 오는 날의 작은 모험",
+  "comment": "실내에서도 우리의 모험은 계속돼요.",
+  "distanceMeters": 2200,
+  "durationSeconds": 980,
+  "averagePaceSecondsPerKm": 445.45454545454544,
+  "splits": [
+    {
+      "distanceMeters": 1000,
+      "durationSeconds": 451
+    },
+    {
+      "distanceMeters": 1000,
+      "durationSeconds": 435
+    },
+    {
+      "distanceMeters": 200,
+      "durationSeconds": 94
+    }
+  ]
+}

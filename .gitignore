@@ -1,0 +1,6 @@
+node_modules/
+web/dist/
+web/public/generated/
+android/local.properties
+*.jks
+.env*
