@@ -6,8 +6,6 @@ export const runSchema = z
     id: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{6}$/),
     date: z.iso.date(),
     startTime: z.iso.datetime({ offset: true }),
-    title: z.string().max(200),
-    comment: z.string().max(4000).optional(),
     distanceMeters: z.number().finite().nonnegative(),
     durationSeconds: positive,
     averagePaceSecondsPerKm: positive.optional(),

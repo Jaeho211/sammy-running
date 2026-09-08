@@ -7,32 +7,19 @@ import { distance, duration, pace, dateLabel } from "./domain/formatters.js";
 import RouteMap from "./components/RouteMap.jsx";
 import "./styles.css";
 
-function TrailArt() {
+function PerformanceGraphic({ stats }) {
   return (
-    <svg className="trail-art" viewBox="0 0 460 300" aria-hidden="true">
-      <circle cx="365" cy="67" r="34" fill="#e9ba72" />
-      <path
-        d="M0 203 Q90 83 174 175 T350 139 T480 174 V300 H0"
-        fill="#d5dfc4"
-      />
-      <path d="M0 250 Q90 162 200 226 T460 189 V300 H0" fill="#afc4a0" />
-      <path
-        d="M260 310 C410 225 136 246 244 189 S361 194 320 154"
-        fill="none"
-        stroke="#f8f2d9"
-        strokeWidth="27"
-      />
-      <g stroke="#344e3f" strokeWidth="8" strokeLinecap="round" fill="none">
-        <circle cx="214" cy="128" r="12" fill="#344e3f" stroke="none" />
-        <path d="m215 146-9 34 24 25m-24-25-21 29m26-54 22 16 16-7" />
-        <circle cx="270" cy="153" r="9" fill="#344e3f" stroke="none" />
-        <path d="m269 167-5 25 19 18m-19-18-13 20m16-39-18-9m19 9 15 9" />
-      </g>
-      <g fill="#637e56">
-        <path d="m56 211 16-50 16 50z" />
-        <path d="m392 197 17-54 17 54z" />
-      </g>
-    </svg>
+    <div className="performance-graphic" aria-hidden="true">
+      <div className="pace-ring">
+        <span>{duration(stats.best1k)}</span>
+        <small>BEST 1K</small>
+      </div>
+      <div className="performance-line" />
+      <div className="performance-meta">
+        <span>{stats.count} RUNS</span>
+        <span>{distance(stats.totalDistance)} KM</span>
+      </div>
+    </div>
   );
 }
 function RunCard({ run, index }) {
@@ -44,8 +31,7 @@ function RunCard({ run, index }) {
       </div>
       <div className="run-card-body">
         <div className="eyebrow">{dateLabel(run.date)}</div>
-        <h3>{run.title}</h3>
-        <p>{run.comment || "함께 달린 소중한 하루"}</p>
+        <h3>{distance(run.distanceMeters)} km Run</h3>
         <div className="run-metrics">
           <strong>
             {distance(run.distanceMeters)} <small>km</small>
@@ -73,29 +59,28 @@ function Dashboard({ runs }) {
     <>
       <section className="hero">
         <div className="hero-copy">
-          <div className="eyebrow">LITTLE STEPS, BIG ADVENTURES</div>
+          <div className="eyebrow">RUN LOG</div>
           <h1>
-            함께 달려서,
-            <br />더 멀리 자라는 우리.
+            달린 만큼,
+            <br />기록은 쌓인다.
           </h1>
           <p>
-            빠르지 않아도 괜찮아.
-            <br />
-            아빠와 나, 우리만의 달리기 모험 일지.
+            거리, 페이스, 구간 기록을
+            <br />한눈에 확인해요.
           </p>
           <a className="button" href="#/runs">
-            우리의 발자국 보기 <span>↗</span>
+            전체 기록 보기 <span>↗</span>
           </a>
         </div>
-        <TrailArt />
-        <span className="hero-note">ONE RUN AT A TIME</span>
+        <PerformanceGraphic stats={stats} />
+        <span className="hero-note">DISTANCE · PACE · PROGRESS</span>
       </section>
       <section className="stats" aria-label="누적 기록">
         {[
-          ["함께 달린 거리", distance(stats.totalDistance), "km", "◎"],
-          ["함께한 달리기", stats.count, "번", "⚑"],
-          ["가장 멀리 달린 날", distance(stats.longest), "km", "↗"],
-          ["가장 빠른 1 km", duration(stats.best1k), "/km", "ϟ"],
+          ["누적 거리", distance(stats.totalDistance), "km", "◎"],
+          ["러닝 횟수", stats.count, "회", "⚑"],
+          ["최장 거리", distance(stats.longest), "km", "↗"],
+          ["최고 1 km", duration(stats.best1k), "/km", "ϟ"],
         ].map(([label, value, unit, icon]) => (
           <div className="stat" key={label}>
             <div className="stat-label">
@@ -113,8 +98,8 @@ function Dashboard({ runs }) {
         <section>
           <div className="section-heading">
             <div>
-              <div className="eyebrow">OUR FOOTPRINTS</div>
-              <h2>최근의 발자국</h2>
+              <div className="eyebrow">RECENT RUNS</div>
+              <h2>최근 기록</h2>
             </div>
             <a href="#/runs">모두 보기 ↗</a>
           </div>
@@ -126,27 +111,27 @@ function Dashboard({ runs }) {
               ))
           ) : (
             <div className="empty">
-              첫 모험을 기다리고 있어요. 기록을 추가하면 여기에 나타나요.
+              아직 러닝 기록이 없습니다.
             </div>
           )}
         </section>
         <aside>
           <section className="milestone">
             <span className="tag">
-              {better ? "NEW PERSONAL BEST" : "NEXT ADVENTURE"}
+              {better ? "PERSONAL BEST" : "NEXT GOAL"}
             </span>
             <div className="milestone-icon">{better ? "✧" : "⚑"}</div>
             <h2>
               {better
-                ? "조금 더 빨라진 우리!"
+                ? "최고 1 km 기록 갱신"
                 : next
                   ? `다음 목적지는 ${next / 1000} km`
-                  : "100 km 너머로!"}
+                  : "100 km 달성"}
             </h2>
             <p>
               {better
                 ? `최근 달리기에서 최고 1 km를 ${duration(better.seconds)} 단축했어요.`
-                : "작은 발걸음이 모여 멋진 모험이 돼요."}
+                : "다음 누적 거리 목표까지의 진행 상황입니다."}
             </p>
             {better && (
               <strong className="record">
@@ -161,14 +146,14 @@ function Dashboard({ runs }) {
                 </div>
                 <progress value={stats.totalDistance} max={next} />
                 <small>
-                  앞으로 {distance(next - stats.totalDistance)} km, 함께 가볼까?
+                  앞으로 {distance(next - stats.totalDistance)} km
                 </small>
               </>
             )}
           </section>
           <section className="badge-preview">
             <div className="section-heading">
-              <h2>우리의 작은 훈장</h2>
+              <h2>기록 배지</h2>
               <a href="#/achievements">모두 보기 ↗</a>
             </div>
             <div className="mini-badges">
@@ -182,7 +167,7 @@ function Dashboard({ runs }) {
                   </div>
                 ))}
             </div>
-            {!stats.count && <p>첫 달리기로 첫 훈장을 만나보세요.</p>}
+            {!stats.count && <p>첫 기록을 추가하면 배지가 열립니다.</p>}
           </section>
         </aside>
       </div>
@@ -201,19 +186,18 @@ function Detail({ run }) {
   return (
     <>
       <a className="back" href="#/runs">
-        ← 모든 발자국
+        ← 전체 기록
       </a>
       <header className="page-heading">
         <div className="eyebrow">
           {dateLabel(run.date)} · {run.startTime.slice(11, 16)} (기록 현지 시각)
         </div>
-        <h1>{run.title}</h1>
-        <p>{run.comment}</p>
+        <h1>{distance(run.distanceMeters)} km Run</h1>
       </header>
       <section className="stats detail-stats">
         {[
           [distance(run.distanceMeters), "km", "달린 거리"],
-          [duration(run.durationSeconds), "", "함께한 시간"],
+          [duration(run.durationSeconds), "", "러닝 시간"],
           [duration(pace(run)), "/km", "평균 페이스"],
         ].map(([v, u, l]) => (
           <div className="stat" key={l}>
@@ -228,13 +212,13 @@ function Detail({ run }) {
       <div className="detail-columns">
         <section className="panel">
           <div className="section-heading">
-            <h2>우리가 달린 길</h2>
+            <h2>경로</h2>
             <span className="muted">출발 ● · 도착 ●</span>
           </div>
           <RouteMap route={run.route} />
         </section>
         <section className="panel">
-          <h2>한 걸음씩, 1 km씩</h2>
+          <h2>1 km 구간</h2>
           <p className="muted">각 구간을 달리는 데 걸린 시간</p>
           {run.splits?.length ? (
             <div className="splits">
@@ -308,16 +292,16 @@ function App() {
     <>
       <header className="site-header">
         <a href="#/" className="brand">
-          <span className="brand-symbol">⌁</span>
+          <span className="brand-symbol">R</span>
           <span>
-            우리의 달리기<small>FATHER & SON RUNNING CLUB</small>
+            RUN LOG<small>DISTANCE · PACE · PROGRESS</small>
           </span>
         </a>
         <nav aria-label="주 메뉴">
           {[
             ["home", "대시보드", "#/"],
             ["runs", "달리기 기록", "#/runs"],
-            ["achievements", "우리의 훈장", "#/achievements"],
+            ["achievements", "기록 배지", "#/achievements"],
           ].map(([id, label, url]) => (
             <a
               key={id}
@@ -331,7 +315,7 @@ function App() {
           ))}
         </nav>
         <span className="club-mark">
-          아빠 + 나 <span>↗</span>
+          SINCE 2026 <span>↗</span>
         </span>
       </header>
       <main>
@@ -343,7 +327,7 @@ function App() {
         </div>
         {status === "loading" ? (
           <div className="empty" role="status">
-            우리의 발자국을 불러오는 중…
+            러닝 기록을 불러오는 중…
           </div>
         ) : status === "error" ? (
           <div className="empty" role="alert">
@@ -357,9 +341,9 @@ function App() {
         ) : page === "runs" ? (
           <>
             <header className="page-heading">
-              <div className="eyebrow">EVERY RUN IS A MEMORY</div>
-              <h1>우리의 발자국</h1>
-              <p>함께 달린 {runs.length}번의 소중한 순간.</p>
+              <div className="eyebrow">RUN HISTORY</div>
+              <h1>전체 기록</h1>
+              <p>총 {runs.length}회의 러닝.</p>
             </header>
             <div className="runs-grid">
               {runs.map((r, i) => (
@@ -368,7 +352,7 @@ function App() {
             </div>
             {!runs.length && (
               <div className="empty">
-                아직 기록이 없어요. 첫 달리기를 기다리고 있어요.
+                아직 러닝 기록이 없습니다.
               </div>
             )}
           </>
@@ -377,12 +361,10 @@ function App() {
         ) : page === "achievements" ? (
           <>
             <header className="page-heading">
-              <div className="eyebrow">SMALL WINS, BIG SMILES</div>
-              <h1>우리의 작은 훈장</h1>
+              <div className="eyebrow">ACHIEVEMENTS</div>
+              <h1>기록 배지</h1>
               <p>
-                경쟁보다 함께 자라는 기쁨.{" "}
-                {achievements(runs).filter((b) => b.unlocked).length}개의 추억을
-                모았어요.
+                달성한 배지 {achievements(runs).filter((b) => b.unlocked).length}개.
               </p>
             </header>
             <div className="badges-grid">
@@ -393,7 +375,7 @@ function App() {
                 >
                   <span className="badge-icon">{b.icon}</span>
                   <div className="eyebrow">
-                    {b.unlocked ? "달성했어요" : "다음 도전"}
+                    {b.unlocked ? "UNLOCKED" : "LOCKED"}
                   </div>
                   <h2>{b.title}</h2>
                   <p>{b.description}</p>
@@ -403,14 +385,14 @@ function App() {
           </>
         ) : (
           <div className="empty">
-            <h1>길을 조금 벗어났네요.</h1>
+            <h1>페이지를 찾을 수 없습니다.</h1>
             <a href="#/">대시보드로 돌아가기</a>
           </div>
         )}
       </main>
       <footer>
-        <span>작은 발걸음, 오래 남을 추억.</span>
-        <span>MADE FOR OUR NEXT ADVENTURE ↗</span>
+        <span>KEEP RUNNING.</span>
+        <span>DISTANCE · PACE · PROGRESS ↗</span>
       </footer>
     </>
   );

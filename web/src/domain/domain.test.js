@@ -9,7 +9,6 @@ const run = {
   id: "2026-09-07T080231",
   date: "2026-09-07",
   startTime: "2026-09-07T08:02:31+09:00",
-  title: "test",
   distanceMeters: 1241,
   durationSeconds: 526,
   splits: [
@@ -80,6 +79,8 @@ test("schema rejects invalid numeric values, duplicate IDs and unknown fields", 
     { ...run, distanceMeters: -1 },
     { ...run, route: [{ lat: 91, lng: 0 }] },
     { ...run, token: "secret" },
+    { ...run, title: "unused" },
+    { ...run, comment: "unused" },
     { ...run, durationSeconds: 0 },
     { ...run, date: "2026-02-31" },
   ])

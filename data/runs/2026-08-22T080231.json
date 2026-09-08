@@ -3,8 +3,6 @@
   "id": "2026-08-22T080231",
   "date": "2026-08-22",
   "startTime": "2026-08-22T08:02:31+09:00",
-  "title": "우리의 첫 번째 달리기",
-  "comment": "천천히, 나란히. 첫 1 km를 달렸어요!",
   "distanceMeters": 1000,
   "durationSeconds": 510,
   "averagePaceSecondsPerKm": 510,

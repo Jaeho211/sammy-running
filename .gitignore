@@ -4,3 +4,9 @@ web/public/generated/
 android/local.properties
 *.jks
 .env*
+.tools/
+android/.gradle/
+android/.kotlin/
+android/**/build/
+android/app/libs/*.aar
+android/app/libs/samsung-health-data-sdk-*/

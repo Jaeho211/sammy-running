@@ -3,43 +3,13 @@ import { mkdir, writeFile } from "node:fs/promises";
 const folder = new URL("../../data/runs/", import.meta.url);
 await mkdir(folder, { recursive: true });
 const samples = [
-  [
-    "2026-08-22",
-    1000,
-    [510],
-    "우리의 첫 번째 달리기",
-    "천천히, 나란히. 첫 1 km를 달렸어요!",
-  ],
-  [
-    "2026-08-26",
-    3000,
-    [490, 478, 465],
-    "처음 만난 3 km",
-    "조금 힘들었지만 끝까지 함께 달렸어요.",
-  ],
-  [
-    "2026-08-30",
-    5000,
-    [482, 470, 459, 452, 449],
-    "우와, 5 km나 달렸어!",
-    "돌아오는 길에 아이스크림 하나씩.",
-  ],
-  [
-    "2026-09-03",
-    2200,
-    [451, 435, 94],
-    "비 오는 날의 작은 모험",
-    "실내에서도 우리의 모험은 계속돼요.",
-  ],
-  [
-    "2026-09-07",
-    5241,
-    [455, 448, 439, 429, 418, 108],
-    "아빠, 오늘은 조금 더 멀리!",
-    "마지막 1 km를 가장 빠르게 달렸어요.",
-  ],
+  ["2026-08-22", 1000, [510]],
+  ["2026-08-26", 3000, [490, 478, 465]],
+  ["2026-08-30", 5000, [482, 470, 459, 452, 449]],
+  ["2026-09-03", 2200, [451, 435, 94]],
+  ["2026-09-07", 5241, [455, 448, 439, 429, 418, 108]],
 ];
-for (const [i, [date, meters, times, title, comment]] of samples.entries()) {
+for (const [i, [date, meters, times]] of samples.entries()) {
   const id = `${date}T080231`,
     durationSeconds = times.reduce((a, b) => a + b, 0);
   const run = {
@@ -47,8 +17,6 @@ for (const [i, [date, meters, times, title, comment]] of samples.entries()) {
     id,
     date,
     startTime: `${date}T08:02:31+09:00`,
-    title,
-    comment,
     distanceMeters: meters,
     durationSeconds,
     averagePaceSecondsPerKm: (durationSeconds / meters) * 1000,

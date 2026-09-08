@@ -57,7 +57,7 @@ export default function RouteMap({ route = [] }) {
       <div
         ref={element}
         className="route-map"
-        aria-label="함께 달린 경로 지도"
+        aria-label="러닝 경로 지도"
       />
       {tileError && (
         <p className="muted">

@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap");
 :root {
   font-family: "Noto Sans KR", sans-serif;
-  color: #263e34;
-  background: #f6f5ef;
+  color: #17211d;
+  background: #f3f5f2;
   font-synthesis: none;
   font-weight: 400;
   line-height: 1.6;
@@ -76,12 +76,12 @@ small {
 .brand-symbol {
   background: #263e34;
   color: #d9ee91;
-  border-radius: 50%;
+  border-radius: 9px;
   width: 43px;
   height: 43px;
   text-align: center;
-  font-size: 36px;
-  line-height: 36px;
+  font-size: 18px;
+  line-height: 43px;
 }
 nav {
   display: flex;
@@ -127,7 +127,7 @@ main {
 .hero {
   overflow: hidden;
   position: relative;
-  background: #e9edde;
+  background: #17211d;
   border-radius: 16px;
   min-height: 352px;
   display: flex;
@@ -137,6 +137,7 @@ main {
   position: relative;
   z-index: 1;
   padding: 38px 44px;
+  color: #ffffff;
 }
 .eyebrow {
   font-size: 10px;
@@ -145,12 +146,15 @@ main {
   color: #75816b;
   margin-bottom: 12px;
 }
+.hero .eyebrow {
+  color: #d9ff55;
+}
 .hero h1 {
   margin-bottom: 16px;
   font-size: 39px;
 }
 .hero p {
-  color: #697762;
+  color: #b8c2bd;
   font-size: 13px;
   line-height: 1.9;
 }
@@ -158,8 +162,8 @@ main {
   display: inline-flex;
   gap: 25px;
   align-items: center;
-  background: #263e34;
-  color: #fff;
+  background: #d9ff55;
+  color: #17211d;
   padding: 12px 19px;
   border: 0;
   border-radius: 7px;
@@ -167,13 +171,56 @@ main {
   margin-top: 9px;
   min-height: 44px;
 }
-.trail-art {
+.performance-graphic {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 51%;
-  height: 100%;
-  object-fit: cover;
+  inset: 0 0 0 50%;
+  padding: 54px 54px 48px;
+  background:
+    linear-gradient(115deg, transparent 0 38%, rgba(217, 255, 85, 0.1) 38% 39%, transparent 39% 100%),
+    repeating-linear-gradient(0deg, transparent 0 38px, rgba(255,255,255,.055) 39px 40px);
+}
+.pace-ring {
+  position: absolute;
+  right: 70px;
+  top: 58px;
+  width: 168px;
+  height: 168px;
+  border: 2px solid #d9ff55;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.pace-ring span {
+  font-size: 39px;
+  font-weight: 700;
+  letter-spacing: -2px;
+}
+.pace-ring small {
+  color: #d9ff55;
+  letter-spacing: 1.8px;
+}
+.performance-line {
+  position: absolute;
+  left: 45px;
+  right: 45px;
+  bottom: 82px;
+  height: 62px;
+  border-top: 3px solid #d9ff55;
+  transform: skewY(-8deg);
+}
+.performance-meta {
+  position: absolute;
+  left: 45px;
+  right: 45px;
+  bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  color: #aeb9b3;
+  font-size: 10px;
+  letter-spacing: 1.5px;
 }
 .hero-note {
   position: absolute;
@@ -181,7 +228,7 @@ main {
   bottom: 17px;
   font-size: 8px;
   letter-spacing: 2px;
-  color: #526b46;
+  color: #82918a;
 }
 .stats {
   display: grid;
@@ -309,8 +356,8 @@ main {
   color: #8a977d;
 }
 .milestone {
-  background: #e8eddb;
-  border: 1px solid #dce4ce;
+  background: #e8ece9;
+  border: 1px solid #d7ddda;
   border-radius: 12px;
   padding: 25px 27px;
 }
@@ -324,7 +371,7 @@ main {
 }
 .milestone-icon {
   font-size: 39px;
-  color: #7e9560;
+  color: #587068;
   margin: 5px 0;
 }
 .milestone h2 {
@@ -383,13 +430,13 @@ progress::-moz-progress-bar {
 .mini-badges span {
   display: block;
   border: 1px solid #dbe0cc;
-  background: #ecefdf;
+  background: #e7ece9;
   border-radius: 50%;
   width: 55px;
   height: 55px;
   margin: 0 auto 8px;
   font-size: 29px;
-  color: #7f9361;
+  color: #536b62;
 }
 .mini-badges small {
   font-size: 10px;
@@ -492,8 +539,8 @@ footer span:last-child {
   gap: 20px;
 }
 .badge {
-  background: #edf0e2;
-  border: 1px solid #dce2cd;
+  background: #e8ece9;
+  border: 1px solid #d7ddda;
   border-radius: 12px;
   text-align: center;
   padding: 27px 15px;
@@ -565,9 +612,8 @@ footer span:last-child {
   .hero h1 {
     font-size: 31px;
   }
-  .trail-art {
-    width: 48%;
-    opacity: 0.9;
+  .performance-graphic {
+    left: 52%;
   }
   .run-card {
     padding: 16px;
@@ -641,10 +687,28 @@ footer span:last-child {
   .hero h1 {
     font-size: 30px;
   }
-  .trail-art {
-    width: 68%;
-    height: 48%;
-    opacity: 0.75;
+  .performance-graphic {
+    inset: 49% 0 0 0;
+  }
+  .pace-ring {
+    width: 118px;
+    height: 118px;
+    right: 30px;
+    top: 22px;
+  }
+  .pace-ring span {
+    font-size: 29px;
+  }
+  .performance-line {
+    left: 28px;
+    right: 28px;
+    bottom: 48px;
+    height: 35px;
+  }
+  .performance-meta {
+    left: 28px;
+    right: 28px;
+    bottom: 14px;
   }
   .hero-note {
     font-size: 6px;

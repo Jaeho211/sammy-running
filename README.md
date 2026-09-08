@@ -1,15 +1,21 @@
-# 우리의 달리기 · Father–Son Running Log
+# RUN LOG
 
-아빠와 아들이 함께 달린 순간을 iPad에서 보는 개인 러닝 일지입니다.
-**현재 Phase 1 웹 프로토타입 완료.** 포함된 기록 5개와 서울 좌표는 모두 가상입니다.
+선택한 러닝 기록을 iPad에서 확인하는 개인 러닝 로그입니다.
+**Phase 1 웹 및 Phase 2 Android reader 코드 구현.** 웹 기록 5개와 서울 좌표는 모두 가상입니다.
 백엔드, 데이터베이스, 웹 인증이나 GitHub API 토큰 없이 정적으로 빌드됩니다.
+
+## 다음 작업을 시작할 때
+
+먼저 [작업 인수인계](docs/handoff.md)를 읽으세요. 완료·미검증 상태, 다음 구현 순서와 완료 기준을 정리했습니다.
+[최초 요구사항](docs/requirements.md)은 전체 범위와 핵심 제약의 기준입니다.
+데이터 형식은 [JSON 계약](docs/run-schema.md), Android 현황은 [Android 계획](android/README.md)을 참고하세요.
 
 ## 구조
 
 ```text
-android/                 Phase 2·3 구현 예정
+android/                 Kotlin Samsung Health reader, demo 빌드, 도메인 테스트
 data/runs/*.json          1 session = 1 JSON
-web/src/domain/           스키마, 통계, 훈장, 포맷 및 테스트
+web/src/domain/           스키마, 통계, 배지, 포맷 및 테스트
 web/src/RunRepository.js  정적 데이터 로딩
 web/src/components/      Leaflet 경로 지도
 web/scripts/             빌드 전 JSON 검증 및 병합
@@ -58,20 +64,21 @@ Safari로 배포 URL을 열고 공유 → 홈 화면에 추가합니다. standal
 폰트를 받지 못하면 시스템 폰트로 표시합니다. API 키가 필요 없는 OpenStreetMap 타일을 사용하고
 저작자 표시를 유지합니다. GPS 없는 실내 기록은 지도 대신 안내를 표시합니다.
 
-## 데이터·성취
+## 데이터·기록 배지
 
 [데이터 계약](docs/run-schema.md)을 참고하세요. 최고 1 km는 정확히 1000m인 완전 구간만 비교합니다.
 짧은 마지막 구간은 원래 거리와 소요 시간을 표시하고 최고 1 km에서 제외합니다.
 최근 기록이 이전 모든 기록의 최고 1 km보다 빠르면 개선 배너를 표시합니다.
-훈장은 누적 데이터에서 계산하며 JSON에 저장하지 않습니다.
+배지는 누적 데이터에서 계산하며 JSON에 저장하지 않습니다. 러닝별 제목이나 메모는 기록하지 않습니다.
 가상 데이터를 실제 기록으로 교체할 때 기존 5개 JSON을 제거하고 `main.jsx`의 데모 안내도 수정하세요.
 
-## Android / Samsung Health (예정)
+## Android / Samsung Health (Phase 2)
 
-현재 Android 빌드 명령이나 APK는 없습니다. [Android 계획](android/README.md)을 참고하세요.
-Phase 2에서 Android Studio/Gradle 프로젝트와 공식 Samsung Health Data SDK를 구성하고,
-실기기 Samsung Health 접근 권한, 최근 exercise session, route/심박/케이던스를 연결합니다.
-SDK의 실제 지원 필드와 권한을 확인한 후 설치·빌드 절차를 추가합니다.
+Kotlin/Gradle 프로젝트, Samsung Health Data SDK 1.1.0 연결, 최근 90일 달리기 목록,
+상세·지도·구간·심박·케이던스, 제목/메모 입력을 구현했습니다. Publish는 아직 비활성화되어 있습니다.
+실제 SDK를 포함한 Samsung APK와 가상 기록 demo APK를 빌드할 수 있습니다.
+[Android 설치·빌드 안내](android/README.md)에 JDK/SDK 설정, 개발용 Samsung Health 설정,
+검증 명령과 실기기 확인 항목을 정리했습니다.
 
 ## GitHub PAT (Phase 3 예정)
 
@@ -83,14 +90,14 @@ Android Settings에서 owner / repository / branch(기본 main) / token을 입�
 
 ## 경로 단순화 및 개인정보
 
-Phase 2에서 GPS/time-series 원본으로 구간 계산 후 Douglas–Peucker(기본 5m, configurable)를 적용합니다.
+Android는 GPS/time-series 원본으로 구간 계산 후 Douglas–Peucker(기본 5m, 3–10m 조정)를 적용합니다.
 geometry를 유지하며 시작/종료점은 보존하고 masking하지 않습니다. raw GPS는 저장소에 올리지 않습니다.
-현재 가상 경로는 각 42점이며 실내 샘플은 route가 없습니다. 실제 단순화 알고리즘은 Phase 2 범위입니다.
+웹 가상 경로는 각 42점이며 실내 샘플은 route가 없습니다. Android 경로 단순화와 구간 계산은 JVM 테스트로 검증합니다.
 집 주소 텍스트, Health 계정 정보, 원본 export는 데이터 계약에 포함하지 않습니다.
 
 ## 남은 단계와 한계
 
-- Phase 2: Samsung Health 읽기, split 계산/테스트, 경로 단순화/테스트, Android UI.
+- Phase 2: reader 코드·APK·핵심 로직 테스트와 실기기 기본 읽기 확인 완료. 남은 검증 범위는 [인수인계](docs/handoff.md) 참고.
 - Phase 3: PAT 저장, Contents API commit, session 중복 방지, Published 상태, 실기기 end-to-end.
-- 실제 iPad 홈 화면 설치와 Samsung 기기 검증, 원격 Pages 배포는 아직 확인하지 않았습니다.
+- 실제 iPad 홈 화면 설치는 미검증입니다. 기존 Pages 배포는 404로 실패했으며 Pages 활성화 설정 확인이 필요합니다.
 - 시계열 없는 데이터는 존재하는 요약만 표시하며 구간 기록을 추측하지 않습니다.
