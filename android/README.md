@@ -1,8 +1,8 @@
-# Android companion · Phase 2
+# Android companion · Phase 2–3
 
 Kotlin 앱에서 Samsung Health의 최근 90일 running / track running 기록을 읽습니다.
 최신순 목록, 상세, 경로 지도, 1 km 구간, 선택적 심박·케이던스를 표시합니다.
-러닝별 제목이나 메모는 기록하지 않습니다. Publish는 Phase 3에서 연결하며 현재 비활성화되어 있습니다.
+러닝별 제목이나 메모는 기록하지 않습니다. GitHub 설정과 선택 기록 Publish를 지원합니다.
 
 ## 빌드
 
@@ -61,11 +61,25 @@ Samsung Health 7.00.6에서는 아래쪽 **Samsung Health Data SDK** 메뉴 안�
 
 ## 구조와 데이터 처리
 
-- `core/`: Android에 의존하지 않는 모델, `RunMapper`, `SplitCalculator`, `RouteSimplifier`, 테스트.
+- `core/`: Android에 의존하지 않는 모델, `RunMapper`, `SplitCalculator`, 게시 로직과 테스트.
 - `app/src/main/`: 공통 UI, `SamsungHealthRepository` 경계와 메모리 상태.
 - `app/src/samsung/`: 실제 SDK 1.1.0 어댑터, 권한 및 페이지별 읽기.
 - `app/src/demo/`: DEMO 표시와 가상 기록 reader. 연결 실패를 데모 데이터로 대체하지 않습니다.
 - `scripts/check-web-contract.mjs`: Android 생성 JSON을 기존 웹 Zod 스키마로 검증.
+
+### GitHub Publish
+
+앱의 **GitHub 설정 → GitHub로 로그인**에서 GitHub App Device Flow 인증을 시작합니다. 앱은 8자리 코드를
+클립보드에 복사하고 GitHub 인증 페이지를 엽니다. owner/repository/branch는 `Jaeho211/sammy-running`과 `main`으로
+고정되어 있습니다. GitHub App Client ID는 공개 식별자로 APK에 포함되며 client secret과 private key는 사용하지 않습니다.
+Access/refresh token은 Android Keystore에서 만든 AES-GCM 키로 암호화되며 SharedPreferences에는 암호문과 IV만
+저장됩니다. Access token 만료 시 refresh token으로 자동 갱신하고 설정 화면에서 로그아웃할 수 있습니다.
+
+상세 화면의 Publish는 먼저 원격 경로를 조회한 뒤 `data/runs/YYYY-MM-DDTHHMMSS.json`을 create-only로 commit합니다.
+동일 파일이 이미 있고 JSON도 같으면 중단된 로컬 상태를 `Published ✓`로 복구합니다. 내용이 다르면 동일 초 충돌로 보고하고
+원격 파일을 덮어쓰지 않습니다. PUT 경합 뒤 409/422가 발생해도 원격을 다시 조회합니다.
+로컬 published key는 Samsung session ID의 SHA-256이며, ID가 비어 있으면 startTime+distance+duration 조합을 사용합니다.
+중복 탭은 게시 중 버튼 비활성화로 막고, 네트워크 실패는 상태를 기록하지 않아 다시 시도할 수 있습니다.
 
 SDK 요약의 distance/duration/meanSpeed/meanHeartRate/maxHeartRate/meanCadence를 우선 사용합니다.
 거리 누락은 `거리 없음`으로 표시하고 JSON 변환은 거부합니다.
@@ -84,20 +98,19 @@ GPS와 요약 거리 차이가 `max(50m, 5%)`보다 크면 구간을 생략합�
 GPS 구간은 오차가 있는 계산값임을 표시하며 요약 거리에 맞춰 임의 배율로 보정하지 않습니다.
 Pause 위치가 불명확한 기록, 실내/누락 시계열에는 추측한 구간을 만들지 않고 사유를 표시합니다.
 
-### 경로 단순화와 지도
+### GPS 경로와 지도
 
-**원본으로 split을 계산한 뒤** 저장·표시용 경로만 Douglas–Peucker로 단순화합니다.
-구면상의 미터 거리, 기본 오차 5m, 화면에서 3–10m 조정이 가능합니다.
-시작·종료점을 유지하고 위치 masking이나 고정 점 개수 제한은 하지 않습니다.
+**원본으로 split을 계산하고**, 유효한 GPS 좌표는 단순화하지 않고 원래 순서와 개수대로 저장·표시합니다.
+시작·종료점을 유지하고 위치 masking이나 점 개수 제한은 하지 않습니다.
 유효하지 않은 좌표가 섞이면 점을 임의로 연결하지 않고 경로 표시를 생략합니다.
 지도는 osmdroid / OpenStreetMap이며 타일 사용 시 네트워크가 필요합니다.
-원본 route와 건강 기록은 파일·로그·GitHub에 기록하지 않습니다. 지도 타일은 앱 캐시에 저장됩니다.
+좌표별 timestamp와 원본 건강 기록은 파일·로그·GitHub에 기록하지 않습니다. 지도 타일은 앱 캐시에 저장됩니다.
 
 ## 실기기 완료 체크
 
 - 운동·경로 허용 / 운동 거부 / 경로만 거부 후 재요청
 - 최근 실외·실내 기록 목록 및 Samsung Health 요약값 대조
-- 경로 시작·종료점, 형태, 허용 오차 변경
+- 경로 시작·종료점과 형태
 - Pause 기록의 구간 생략과 불완전 기록 안내
 - 화면 회전·뒤로가기·연결 실패 후 재시도
 
@@ -106,7 +119,9 @@ Pause 위치가 불명확한 기록, 실내/누락 시계열에는 추측한 구
 상세 하단까지 스크롤되는 것도 확인했습니다. 권한 거부·경로만 거부 후 재요청, 실내 기록, 실제 pause 사례,
 회전과 여러 기록의 split 조건은 아직 확인하지 않았습니다.
 컴파일·JVM 테스트 결과와 위 실기기 확인 범위를 구분합니다.
-Phase 3의 PAT / Keystore / GitHub commit / 중복 방지 / Published 상태는 미구현입니다.
+Phase 3의 Device Flow / token refresh·암호화 / GitHub 요청 / 중복·충돌 / Published 상태는 JVM 테스트와
+두 flavor 빌드·lint를 통과했습니다. 2026-09-12 SM-S926N에서 실제 Device Flow 로그인과 `GitHub 연결됨 ✓`,
+Activity 재생성 후 pending 인증 복구를 확인했습니다. commit → Actions → Pages end-to-end는 아직 확인하지 않았습니다.
 
 ## 공식 API 근거 (2026-09-08 확인)
 

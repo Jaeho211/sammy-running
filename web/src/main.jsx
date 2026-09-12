@@ -319,12 +319,6 @@ function App() {
         </span>
       </header>
       <main>
-        <div className="sample-notice">
-          SAMPLE JOURNAL{" "}
-          <span>
-            지금은 가상의 달리기 5개로 채운 데모예요. 경로도 가상의 좌표입니다.
-          </span>
-        </div>
         {status === "loading" ? (
           <div className="empty" role="status">
             러닝 기록을 불러오는 중…

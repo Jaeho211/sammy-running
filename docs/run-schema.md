@@ -15,7 +15,7 @@
 | splits | 선택, distanceMeters/durationSeconds 각각 0 초과 |
 | heartRate | 선택, average/max bpm, 0 초과 |
 | cadence | 선택, average spm, 0 초과 |
-| route | 선택, 단순화된 lat/lng 배열, 위도 ±90 / 경도 ±180 |
+| route | 선택, 전체 GPS lat/lng 배열, 위도 ±90 / 경도 ±180. 좌표별 timestamp는 제외 |
 
 선택 필드는 없으면 생략합니다. null은 사용하지 않습니다. route가 없거나 점이 두 개 미만이면 지도를 표시하지 않습니다.
 러닝별 제목과 메모는 저장하지 않습니다.

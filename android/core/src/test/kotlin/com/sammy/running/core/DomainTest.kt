@@ -49,41 +49,17 @@ class DomainTest {
         assertTrue(SplitCalculator().calculate(runs[2]).splits.isEmpty())
     }
 
-    @Test fun `continuous GPS produces kilometer splits before simplification`() {
+    @Test fun `continuous GPS produces kilometer splits and preserves every route point`() {
         val start = Instant.parse("2026-09-07T00:00:00Z")
         val route = (0..300).map { RouteSample(start.plusSeconds(it.toLong()), GeoPoint(0.0, it * 0.00009)) }
         val raw = Fixtures.runs()[0].copy(startTime = start, endTime = start.plusSeconds(300),
             durationSeconds = 300.0, distanceMeters = 3002.0, route = route, providedSplits = emptyList())
-        val a = RunMapper().preview(raw, 3.0)
-        val b = RunMapper().preview(raw, 10.0)
-        assertEquals(4, a.splitResult.splits.size)
-        assertEquals(a.splitResult, b.splitResult)
-        assertEquals(2, a.route.size)
-        assertEquals(300.0, a.splitResult.splits.sumOf { it.durationSeconds }, 0.001)
+        val preview = RunMapper().preview(raw)
+        assertEquals(4, preview.splitResult.splits.size)
+        assertEquals(route.map { it.point }, preview.route)
+        assertEquals(301, preview.route.size)
+        assertEquals(300.0, preview.splitResult.splits.sumOf { it.durationSeconds }, 0.001)
         assertTrue(SplitCalculator().calculate(raw.copy(distanceMeters = 5000.0)).splits.isEmpty())
-    }
-
-    @Test fun `simplification preserves endpoints and tolerance`() {
-        val points = Fixtures.runs().first().route.map { it.point }
-        val simplified = RouteSimplifier.simplify(points, 5.0)
-        assertEquals(points.first(), simplified.first())
-        assertEquals(points.last(), simplified.last())
-        assertTrue(simplified.size < points.size / 2)
-        var index = 0
-        simplified.zipWithNext().forEach { (a, b) ->
-            val end = points.indexOf(b).let { if (it <= index) points.lastIndex else it }
-            for (i in index..end) assertTrue(RouteSimplifier.segmentDistance(points[i], a, b) <= 5.001)
-            index = end
-        }
-    }
-
-    @Test fun `empty repeated dateline and invalid routes`() {
-        assertTrue(RouteSimplifier.simplify(emptyList()).isEmpty())
-        val point = GeoPoint(37.0, 127.0)
-        assertEquals(listOf(point, point), RouteSimplifier.simplify(List(100) { point }))
-        assertEquals(2, RouteSimplifier.simplify(listOf(GeoPoint(0.0, 179.9), GeoPoint(0.0, 180.0), GeoPoint(0.0, -179.9))).size)
-        assertFailsWith<IllegalArgumentException> { RouteSimplifier.simplify(listOf(GeoPoint(91.0, 0.0))) }
-        assertFailsWith<IllegalArgumentException> { RouteSimplifier.simplify(listOf(point), Double.NaN) }
     }
 
     @Test fun `pace uses proper units and rejects zero invalid values`() {

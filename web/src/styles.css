@@ -111,19 +111,6 @@ main {
   margin: auto;
   padding: 0 0 48px;
 }
-.sample-notice {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  font-size: 9px;
-  letter-spacing: 1.3px;
-  color: #7a806f;
-  padding: 19px 0;
-}
-.sample-notice span {
-  font-size: 11px;
-  letter-spacing: 0;
-}
 .hero {
   overflow: hidden;
   position: relative;
@@ -667,15 +654,6 @@ footer span:last-child {
   nav a {
     font-size: 12px;
     padding: 8px 0;
-  }
-  .sample-notice {
-    display: block;
-    font-size: 8px;
-  }
-  .sample-notice span {
-    display: block;
-    margin-top: 4px;
-    font-size: 9px;
   }
   .hero {
     min-height: 440px;

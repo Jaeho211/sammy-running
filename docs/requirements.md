@@ -212,39 +212,14 @@ Optional data가 없는 경우 null을 저장하기보다는 해당 field 자체
 
 ---
 
-# 5. Route simplification
+# 5. GPS route
 
-중요하다.
-
-GitHub에 Samsung Health의 모든 GPS point를 그대로 저장하지 않는다.
-
-웹사이트에서 실제 달린 형태를 충분히 알아볼 수 있을 정도로 route를 simplify한다.
+GitHub에는 Samsung Health에서 읽은 유효한 GPS point를 원래 순서와 개수 그대로 저장한다.
 
 시작점/종료점을 제거하거나 위치를 숨길 필요는 없다.
 
-목표는 privacy masking이 아니라:
-
-* JSON 크기 감소
-* map rendering 단순화
-* 불필요하게 촘촘한 GPS sample 제거
-
-이다.
-
-Douglas-Peucker 또는 유사한 line simplification algorithm을 사용한다.
-
-원본 route가 예를 들어 2000 points라면 일반적인 3~10 km running에서 대략 수십~수백 points 수준으로 줄어드는 정도가 적당하다.
-
-고정 point count로 무조건 맞추기보다는 geometry를 유지하는 방식으로 구현한다.
-
-simplification tolerance는 configurable하게 만든다.
-
-예:
-
-```kotlin
-const val ROUTE_SIMPLIFICATION_TOLERANCE_METERS = 5.0
-```
-
-필요하면 3~10m 범위에서 조정할 수 있게 한다.
+경로 단순화나 고정 point count 제한을 적용하지 않는다.
+JSON에는 lat/lng만 저장하고 좌표별 timestamp와 원본 Samsung Health export는 제외한다.
 
 ---
 
@@ -402,7 +377,7 @@ Splits
 0.24   1:48
 ```
 
-그리고 simplified GPS route를 map 위에 표시한다.
+그리고 GPS route를 map 위에 표시한다.
 
 MapLibre GL JS 또는 Leaflet을 사용할 수 있다.
 
@@ -554,7 +529,7 @@ GPS route 자체는 표시해도 된다.
 
 시작점과 종료점을 제거하거나 masking할 필요는 없다.
 
-다만 GitHub에는 simplified route만 저장한다.
+GitHub에는 전체 GPS 좌표를 저장하지만 좌표별 timestamp와 원본 export는 저장하지 않는다.
 
 ---
 
@@ -570,7 +545,6 @@ Android:
 SamsungHealthRepository
 RunMapper
 SplitCalculator
-RouteSimplifier
 GitHubPublisher
 PublishedRunStore
 ```
@@ -597,7 +571,6 @@ domain model과 UI code를 섞지 않는다.
 
 ```text
 SplitCalculator
-RouteSimplifier
 pace calculation
 aggregate statistics
 achievement calculation
@@ -655,7 +628,7 @@ Android Samsung Health reader.
 * run detail
 * split calculation
 * GPS route
-* route simplification
+* GPS route
 
 ## Phase 3
 
@@ -682,7 +655,7 @@ README에는 반드시 다음을 문서화한다.
 * GitHub PAT creation/configuration
 * GitHub Pages configuration
 * JSON schema
-* route simplification strategy
+* GPS route 저장 방식
 
 ---
 
@@ -696,9 +669,9 @@ README에는 반드시 다음을 문서화한다.
 4. iPad는 GitHub Pages 웹사이트만 사용한다.
 5. 내가 혼자 달린 기록을 자동으로 판단하려 하지 않는다.
 6. Android에서 내가 Publish한 기록만 아들과 함께 달린 기록이다.
-7. raw GPS route 전체를 GitHub에 저장하지 않는다.
+7. 전체 GPS lat/lng는 저장하되 좌표별 timestamp와 원본 Samsung Health export는 저장하지 않는다.
 8. 시작/종료 지점 privacy masking은 하지 않는다.
-9. simplified route는 실제 경로 형태가 충분히 유지되어야 한다.
+9. GPS 좌표는 단순화하지 않고 원래 순서와 개수를 유지한다.
 10. 처음부터 복잡한 authentication/user account 시스템을 만들지 않는다.
 11. MVP를 과도하게 확장하지 않는다.
 

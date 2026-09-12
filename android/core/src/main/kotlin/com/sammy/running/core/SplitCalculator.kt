@@ -2,7 +2,11 @@ package com.sammy.running.core
 
 import java.time.Duration
 import kotlin.math.abs
+import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.max
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 data class SplitResult(val splits: List<Split>, val note: String)
 
@@ -28,7 +32,7 @@ class SplitCalculator(private val maxSampleGapSeconds: Double = 30.0) {
             return SplitResult(emptyList(), "전체 시간의 GPS 또는 거리 시계열이 없어 구간을 계산할 수 없어요.")
         var distance = 0.0
         val samples = route.mapIndexed { index, point ->
-            if (index > 0) distance += RouteSimplifier.distance(route[index - 1].point, point.point)
+            if (index > 0) distance += geoDistance(route[index - 1].point, point.point)
             val time = Duration.between(route.first().timestamp, point.timestamp).toMillis() / 1000.0
             DistanceSample(time, time, distance)
         }
@@ -37,6 +41,15 @@ class SplitCalculator(private val maxSampleGapSeconds: Double = 30.0) {
             return SplitResult(emptyList(), "GPS 거리와 요약 거리 차이가 커서 구간을 생략했어요.")
         val splits = fromSamples(samples)
         return SplitResult(splits, if (splits.isEmpty()) "GPS 시계열에 누락 또는 잘못된 값이 있어 구간을 생략했어요." else "원본 GPS로 계산한 구간 · GPS 오차로 요약 거리와 다를 수 있어요.")
+    }
+
+    private fun geoDistance(a: GeoPoint, b: GeoPoint): Double {
+        val lat1 = Math.toRadians(a.lat)
+        val lat2 = Math.toRadians(b.lat)
+        val dLat = lat2 - lat1
+        val dLng = Math.toRadians(b.lng - a.lng)
+        val haversine = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLng / 2) * sin(dLng / 2)
+        return 6371008.8 * 2 * atan2(sqrt(haversine), sqrt((1 - haversine).coerceAtLeast(0.0)))
     }
 
     fun fromSamples(samples: List<DistanceSample>): List<Split> {
