@@ -121,7 +121,7 @@ Pause 위치가 불명확한 기록, 실내/누락 시계열에는 추측한 구
 컴파일·JVM 테스트 결과와 위 실기기 확인 범위를 구분합니다.
 Phase 3의 Device Flow / token refresh·암호화 / GitHub 요청 / 중복·충돌 / Published 상태는 JVM 테스트와
 두 flavor 빌드·lint를 통과했습니다. 2026-09-12 SM-S926N에서 실제 Device Flow 로그인과 `GitHub 연결됨 ✓`,
-Activity 재생성 후 pending 인증 복구를 확인했습니다. commit → Actions → Pages end-to-end는 아직 확인하지 않았습니다.
+Activity 재생성 후 pending 인증 복구, 실제 기록 commit, `Published ✓`, Actions와 Pages 반영을 확인했습니다.
 
 ## 공식 API 근거 (2026-09-08 확인)
 

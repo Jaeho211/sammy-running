@@ -93,12 +93,13 @@ private key는 사용하지 않습니다. Access/refresh token은 Android Keysto
 
 Android는 GPS/time-series 원본으로 구간을 계산하고 유효한 GPS 좌표를 원래 순서와 개수 그대로 게시합니다.
 시작/종료점도 보존하며 masking하지 않습니다. 좌표별 timestamp와 원본 Samsung Health export는 저장소에 넣지 않습니다.
-웹 가상 경로는 각 42점이며 실내 샘플은 route가 없습니다. 전체 GPS 좌표 보존과 구간 계산은 JVM 테스트로 검증합니다.
+Android demo flavor의 가상 기록은 테스트에만 사용하며 웹 저장소에는 실제 Publish 기록만 둡니다.
+전체 GPS 좌표 보존과 구간 계산은 JVM 테스트로 검증합니다.
 집 주소 텍스트, Health 계정 정보, 원본 export는 데이터 계약에 포함하지 않습니다.
 
 ## 남은 단계와 한계
 
 - Phase 2: reader 코드·APK·핵심 로직 테스트와 실기기 기본 읽기 확인 완료. 남은 검증 범위는 [인수인계](docs/handoff.md) 참고.
-- Phase 3: GitHub App Device Flow와 token 갱신·암호화 저장, Contents API create-only commit, session 중복 방지, Published 상태 구현. 실제 repository end-to-end는 미검증입니다.
-- 실제 iPad 홈 화면 설치는 미검증입니다. 기존 Pages 배포는 404로 실패했으며 Pages 활성화 설정 확인이 필요합니다.
+- Phase 3: GitHub App 로그인 → 실제 기록 commit → Actions → Pages 반영과 Published 상태까지 실기기에서 확인했습니다.
+- 실제 iPad 홈 화면 설치는 미검증입니다.
 - 시계열 없는 데이터는 존재하는 요약만 표시하며 구간 기록을 추측하지 않습니다.

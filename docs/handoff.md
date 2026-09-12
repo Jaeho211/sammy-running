@@ -5,7 +5,7 @@
 ## 재개 지점
 
 **Phase 1 웹, Phase 2 Android reader, Phase 3 GitHub Publish 코드와 로컬 검증 완료.**
-다음 범위는 GitHub App 로그인 → Publish → Actions → Pages → iPad end-to-end 검증입니다.
+실사용 전환과 GitHub App 로그인 → Publish → Actions → Pages 검증까지 완료했습니다. 다음 범위는 iPad 설치와 남은 edge case 검증입니다.
 
 - 저장소: https://github.com/Jaeho211/sammy-running
 - 로컬: `E:\Gits\sammy-running`
@@ -28,7 +28,7 @@
 | --- | --- |
 | 웹 | RUN LOG 대시보드·전체 기록·상세·기록 배지, 정적 JSON, Leaflet/OSM, PWA 구현 |
 | 웹 검증 | 도메인 테스트 6개와 production build 통과 |
-| 배포 | GitHub Pages workflow 구현. 실제 Pages 활성화/배포 성공은 미확인 |
+| 배포 | GitHub Pages workflow와 실제 배포 성공, live JSON 1개 및 detail HTTP 200 확인 |
 | Android core | 모델, `RunMapper`, `SplitCalculator`, 전체 GPS 좌표 보존, fixture와 JVM 테스트 구현 |
 | Android reader | Samsung Health Data SDK 1.1.0 권한, 최근 90일 running/track running 페이지 읽기, 최신순 중복 제거 구현 |
 | Android UI | 목록, 상세, OSM 경로, split 안내, 심박·케이던스 구현 |
@@ -36,7 +36,7 @@
 | 계약 검증 | Android 생성 fixture 3개가 웹 Run JSON v1 스키마 통과 |
 | 실기기 | SM-S926N에서 두 APK 설치·실행, demo 목록/상세, 실제 권한·최근 기록 목록·상세·경로·지표 렌더링 확인 |
 | GitHub Publish | Device Flow 로그인·refresh, Keystore AES-GCM token 저장, Contents API create-only commit, 중복·경합·충돌 처리 구현 |
-| Publish 검증 | core 단위 테스트, demo/samsung build·lint, 웹 JSON 계약, SM-S926N 실제 Device Flow 로그인 통과. 원격 commit 이후는 미검증 |
+| Publish 검증 | SM-S926N 실제 로그인, commit, Published 상태, Actions와 Pages 반영까지 통과 |
 | 아직 미검증 | 운동/경로 권한 거부·재요청, 실내 기록, 화면 회전, 실제 pause 사례, 여러 실제 기록의 split 조건 |
 
 2026-09-08 실기기 확인 중 지도가 세로 스크롤을 가로채는 문제를 수정했습니다. 이제 한 손가락 세로 드래그는
@@ -76,12 +76,11 @@ npm run build
 6. 중복 탭, 재시도, 원격 동일 파일, PUT 경합, 동일 초의 다른 파일 충돌을 처리합니다.
 7. 원격 성공 또는 동일 내용 확인 뒤에만 `Published ✓`를 표시합니다.
 
-## 다음 작업 순서: end-to-end 검증
+## 다음 작업 순서: 남은 실기기 검증
 
-1. 실제 기록 하나를 Publish하고 파일 경로·JSON·commit message를 확인합니다.
-2. 같은 기록 재진입 시 `Published ✓` 및 중복 commit 방지를 확인합니다.
-3. Actions 성공과 Pages 데이터 갱신을 확인하고 iPad Safari/PWA에서 엽니다.
-4. 로그아웃·재로그인과 access token 만료 후 refresh를 실기기에서 확인합니다.
+1. iPad Safari에서 Pages를 열고 홈 화면 추가/PWA 동작을 확인합니다.
+2. 로그아웃·재로그인과 access token 만료 후 refresh를 실기기에서 확인합니다.
+3. 운동/경로 권한 거부, 실내 기록, 실제 pause 사례와 화면 회전을 확인합니다.
 
 ## 계속 지킬 제약과 알려진 한계
 
@@ -92,5 +91,4 @@ npm run build
 - Samsung Health SDK는 실제 휴대폰과 개발용 Data Read 설정이 필요합니다.
 - GPS가 세션 전체 시간 범위를 덮지 않거나 pause 위치를 알 수 없는 실제 기록은 route가 보여도 split이 생략될 수 있습니다.
 - SDK/AndroidX 최신 버전 알림 등 lint warning 5개가 있으나 lint error는 없습니다.
-- 실제 iPad 홈 화면 설치와 원격 Pages 성공은 아직 확인하지 않았습니다.
-- Phase 3 실제 GitHub App 로그인/remote commit/Actions/Pages 흐름은 실기기에서 미검증입니다.
+- 실제 iPad 홈 화면 설치는 아직 확인하지 않았습니다.
