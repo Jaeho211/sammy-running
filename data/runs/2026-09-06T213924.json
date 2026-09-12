@@ -1,15 +1,8 @@
 {
   "averagePaceSecondsPerKm": 472.0437336965953,
-  "cadence": {
-    "average": 150.84933471679688
-  },
   "date": "2026-09-06",
   "distanceMeters": 2199.20703125,
   "durationSeconds": 1038.122,
-  "heartRate": {
-    "average": 124.0,
-    "max": 143.0
-  },
   "id": "2026-09-06T213924",
   "route": [
     {

@@ -249,13 +249,6 @@ function Detail({ run }) {
             <p className="empty">구간 기록이 없는 달리기예요.</p>
           )}
           <p className="muted">★ 가장 빠른 온전한 1 km 구간</p>
-          {run.heartRate && (
-            <p>
-              심박수 · 평균 {run.heartRate.average} / 최대 {run.heartRate.max}{" "}
-              bpm
-            </p>
-          )}
-          {run.cadence && <p>평균 케이던스 · {run.cadence.average} spm</p>}
         </section>
       </div>
     </>

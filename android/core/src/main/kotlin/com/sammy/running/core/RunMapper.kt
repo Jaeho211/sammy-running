@@ -29,9 +29,6 @@ class RunMapper(private val calculator: SplitCalculator = SplitCalculator()) {
             distanceMeters = distance,
             durationSeconds = raw.durationSeconds, averagePaceSecondsPerKm = preview.pace,
             splits = preview.splitResult.splits.takeIf { it.isNotEmpty() },
-            heartRate = raw.heartRate?.let { HeartRate(it.average.positiveOrNull(), it.max.positiveOrNull()) }
-                ?.takeIf { it.average != null && it.max != null },
-            cadence = raw.cadence?.takeIf { it.average.positiveOrNull() != null },
             route = preview.route.takeIf { it.size >= 2 },
         )
     }

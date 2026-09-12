@@ -81,6 +81,8 @@ test("schema rejects invalid numeric values, duplicate IDs and unknown fields", 
     { ...run, token: "secret" },
     { ...run, title: "unused" },
     { ...run, comment: "unused" },
+    { ...run, heartRate: { average: 120, max: 150 } },
+    { ...run, cadence: { average: 160 } },
     { ...run, durationSeconds: 0 },
     { ...run, date: "2026-02-31" },
   ])

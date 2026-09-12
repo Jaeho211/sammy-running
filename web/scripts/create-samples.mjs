@@ -41,8 +41,6 @@ for (const [i, [date, meters, times]] of samples.entries()) {
         ),
       };
     });
-    run.heartRate = { average: 128 + i * 2, max: 149 + i * 3 };
-    run.cadence = { average: 150 + i * 2 };
   }
   await writeFile(
     new URL(`${id}.json`, folder),

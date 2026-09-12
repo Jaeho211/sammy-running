@@ -12,8 +12,6 @@ export const runSchema = z
     splits: z
       .array(z.object({ distanceMeters: positive, durationSeconds: positive }))
       .optional(),
-    heartRate: z.object({ average: positive, max: positive }).optional(),
-    cadence: z.object({ average: positive }).optional(),
     route: z
       .array(
         z.object({

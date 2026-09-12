@@ -46,6 +46,7 @@ split 안내와 비활성 Publish 버튼까지 스크롤되는 것을 확인했�
 ## Phase 2 구현 결정
 
 - SDK가 제공한 요약 distance/duration/speed/heart rate/cadence를 우선 사용합니다.
+- 심박수와 케이던스는 Android 화면에서만 표시하며 GitHub JSON에는 게시하지 않습니다.
 - split은 제공 split → 원본 누적 거리/active time → 조건을 충족하는 원본 GPS 순서로 계산합니다.
 - pause 위치, 전체 시간 범위 또는 거리 일치가 불충분하면 split을 추측하지 않고 이유를 표시합니다.
 - 원본으로 split을 계산하고 유효한 GPS 좌표는 단순화 없이 원래 순서와 개수대로 게시합니다.
@@ -86,7 +87,7 @@ npm run build
 
 - 단일 monorepo이며 backend/database를 추가하지 않습니다. iPad는 정적 웹만 사용합니다.
 - 사용자가 Publish한 기록만 함께 달린 기록입니다. 자동 분류나 `withDad` 체크박스는 없습니다.
-- 좌표별 timestamp, 원본 Samsung Health export와 계정 정보는 저장소에 넣지 않습니다. 전체 GPS 좌표와 시작·종료점은 게시합니다.
+- 좌표별 timestamp, 심박수, 케이던스, 원본 Samsung Health export와 계정 정보는 저장소에 넣지 않습니다. 전체 GPS 좌표와 시작·종료점은 게시합니다.
 - 웹 최고 1 km는 `distanceMeters === 1000`인 완전 구간만 비교합니다.
 - Samsung Health SDK는 실제 휴대폰과 개발용 Data Read 설정이 필요합니다.
 - GPS가 세션 전체 시간 범위를 덮지 않거나 pause 위치를 알 수 없는 실제 기록은 route가 보여도 split이 생략될 수 있습니다.

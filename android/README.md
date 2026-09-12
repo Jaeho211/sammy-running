@@ -83,7 +83,7 @@ Access/refresh token은 Android Keystore에서 만든 AES-GCM 키로 암호화�
 
 SDK 요약의 distance/duration/meanSpeed/meanHeartRate/maxHeartRate/meanCadence를 우선 사용합니다.
 거리 누락은 `거리 없음`으로 표시하고 JSON 변환은 거부합니다.
-심박은 UI에서 존재하는 값을 각각 표시하며 v1 JSON에는 average/max가 모두 유효할 때만 포함합니다.
+심박과 케이던스는 UI에서만 표시하며 v1 JSON과 GitHub에는 포함하지 않습니다.
 기록 offset이 없으면 UTC로 표시하고 안내합니다. SDK UID와 세션 시작 시각·타입은 메모리 식별에만 사용합니다.
 
 ### 1 km 구간

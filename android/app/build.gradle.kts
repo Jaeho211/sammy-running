@@ -11,8 +11,8 @@ android {
         applicationId = "com.sammy.running"
         minSdk = 29
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.3.0"
+        versionCode = 2
+        versionName = "0.3.1"
         buildConfigField("String", "GITHUB_APP_CLIENT_ID", "\"Iv23liqtpl8mOCCTUekN\"")
     }
     buildFeatures { buildConfig = true }

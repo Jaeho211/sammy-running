@@ -74,7 +74,7 @@ Safari로 배포 URL을 열고 공유 → 홈 화면에 추가합니다. standal
 ## Android / Samsung Health (Phase 2)
 
 Kotlin/Gradle 프로젝트, Samsung Health Data SDK 1.1.0 연결, 최근 90일 달리기 목록,
-상세·지도·구간·심박·케이던스, 제목/메모 입력을 구현했습니다. Publish는 아직 비활성화되어 있습니다.
+상세·지도·구간·심박·케이던스와 GitHub Publish를 구현했습니다. 심박수와 케이던스는 기기에서만 표시하고 게시하지 않습니다.
 실제 SDK를 포함한 Samsung APK와 가상 기록 demo APK를 빌드할 수 있습니다.
 [Android 설치·빌드 안내](android/README.md)에 JDK/SDK 설정, 개발용 Samsung Health 설정,
 검증 명령과 실기기 확인 항목을 정리했습니다.
@@ -92,7 +92,7 @@ private key는 사용하지 않습니다. Access/refresh token은 Android Keysto
 ## GPS 경로 및 개인정보
 
 Android는 GPS/time-series 원본으로 구간을 계산하고 유효한 GPS 좌표를 원래 순서와 개수 그대로 게시합니다.
-시작/종료점도 보존하며 masking하지 않습니다. 좌표별 timestamp와 원본 Samsung Health export는 저장소에 넣지 않습니다.
+시작/종료점도 보존하며 masking하지 않습니다. 좌표별 timestamp, 심박수, 케이던스와 원본 Samsung Health export는 저장소에 넣지 않습니다.
 Android demo flavor의 가상 기록은 테스트에만 사용하며 웹 저장소에는 실제 Publish 기록만 둡니다.
 전체 GPS 좌표 보존과 구간 계산은 JVM 테스트로 검증합니다.
 집 주소 텍스트, Health 계정 정보, 원본 export는 데이터 계약에 포함하지 않습니다.

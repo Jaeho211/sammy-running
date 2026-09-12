@@ -190,15 +190,6 @@ GitHub에는 한 번의 running session을 하나의 JSON 파일로 저장한다
     }
   ],
 
-  "heartRate": {
-    "average": 132,
-    "max": 158
-  },
-
-  "cadence": {
-    "average": 156
-  },
-
   "route": [
     {
       "lat": 37.5101,
@@ -530,6 +521,7 @@ GPS route 자체는 표시해도 된다.
 시작점과 종료점을 제거하거나 masking할 필요는 없다.
 
 GitHub에는 전체 GPS 좌표를 저장하지만 좌표별 timestamp와 원본 export는 저장하지 않는다.
+심박수와 케이던스는 Android 화면에서만 표시하고 GitHub JSON에는 저장하지 않는다.
 
 ---
 

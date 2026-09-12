@@ -37,8 +37,6 @@ data class RunJson(
     val durationSeconds: Double,
     val averagePaceSecondsPerKm: Double?,
     val splits: List<Split>?,
-    val heartRate: HeartRate?,
-    val cadence: Cadence?,
     val route: List<GeoPoint>?,
 )
 
